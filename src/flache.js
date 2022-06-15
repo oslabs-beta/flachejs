@@ -1,4 +1,4 @@
-const localforage = require("../node_modules/localforage");
+// const localforage = require("../node_modules/localforage");
 
 localforage.config({
   name: 'clientCache',
@@ -12,6 +12,7 @@ const store = localforage.createInstance({
 })
 
 store.setItem('test', { message: 'this is a test to see if this even works' });
+store.setItem('test2', [1,2,3]);
 
 store.getItem('test').then(res => console.log(res))
 
