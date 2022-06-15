@@ -1,0 +1,40 @@
+{
+  "name": "flachejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/flache.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oslabs-beta/flachejs.git"
+  },
+  "keywords": [],
+  "contributors": [
+    {
+      "name": "Jacob Policano",
+      "url": "https://github.com/jdpolicano"
+    },
+    {
+      "name": "Jasmair Jaswal",
+      "url": "https://github.com/twojaytech"
+    },
+    {
+      "name": "Iraj Zuberi",
+      "url": " https://github.com/izuberi"
+    },
+    {
+      "name": "Vernita Lawren",
+      "url": "https://github.com/v-law"
+    }
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oslabs-beta/flachejs/issues"
+  },
+  "homepage": "https://github.com/oslabs-beta/flachejs#readme",
+  "dependencies": {
+    "localforage": "^1.10.0"
+  }
+}
