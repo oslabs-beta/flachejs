@@ -1,15 +1,15 @@
-import localforage from 'localforage';
-import generateKey from './helpers/generateKey';
+import localforage from "localforage";
+import generateKey from "./helpers/generateKey";
 
 const store = localforage.createInstance({
-  name: 'httpCache',
-  storeName: 'entries',
-  description: 'A cache for client HTTP requests',
-  version: 1.0
-})
+  name: "httpCache",
+  storeName: "entries",
+  description: "A cache for client HTTP requests",
+  version: 1.0,
+});
 
-store.setItem('test', { message: 'this is a test to see if this even works' });
-store.setItem('test2', [1, 2, 3]);
+store.setItem("test", { message: "this is a test to see if this even works" });
+store.setItem("test2", [1, 2, 3]);
 // store.clear();
 //store.getItem('test').then(res => console.log(res))
 
@@ -18,7 +18,7 @@ REMAINING NOTES FOR GET FETCH REQUEST FUNCTIONS
 Still to do: 
 - Change it to accept parameters like a usual Fetch Request
 - This will probably take the same arguments as the standard fetch request, but will execute logic/helper functions before returning data to the client. 
-- Take in key from jasmirs function: value is data response from fetch request
+- Take in key from jasmairs function: value is data response from fetch request
 - This should take a request and transform it into a valid entry for the DB
 - Add a TTL component to response too
 - Should probably send some kind of success note or failure notice.  */
@@ -28,65 +28,30 @@ Still to do:
  * @param {string} url URL to where fetch request is being made
  * @return {object} Object containing the resulting data from executing the request in the server
  */
-async function getFetchRequest(url) {
+async function getFetchRequest(url, reqbody) {
   console.log("Fetching from Server...");
-  let response = await fetch(url)
-    .then((res) => res.json())
-    .then((data) => { return data; })
-    .catch((err) => console.log('fetch error: ', err));
-
+  let response;
+  if (!reqbody) {
+    response = await fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => console.log("fetch error: ", err));
+  } else {
+    response = await fetch(url, reqbody)
+      .then((res) => res.json())
+      .then((data) => {
+        return data;
+      })
+      .catch((err) => console.log("fetch error: ", err));
+  }
   return response;
 }
 
 /**
- * Function to Retreive data from Cache
- * @param {func} func
- * @return {object} Object containing the resulting data from the cache
- */
-function memoizer(func) {
-  var cache = localforage.createInstance({
-    name: "fetchRequests"
-  });
-
-  return async function (url) {
-    const uniqueKey = generateKey(url);
-    const cacheResult = await cache.getItem(uniqueKey)
-      .then(data => {
-        if (!data) return null; 
-        // needs to return data if valid and null if not; 
-        return validateCache(cache, uniqueKey, data);
-      });
-    
-    if (!cacheResult) {
-      const apiResult = await func(url);
-      const value = {ttl: Date.now() + 5000, data: apiResult};
-      await cache.setItem(uniqueKey, value);
-      return value.data; 
-    }
-
-    // Take from cache and return the data value
-    return cacheResult.data; 
-  }
-}
-
-/**
- * Function that starts the caching process
- * @param {function} cbFunction 
- * @param {string} uniqueKey The URL to which request is made to 
- * @return {object} object containing the duration and the resulting data from executing the request
- */
-async function GetRequest(cbFunction, url) {
-  let start = performance.now();
-  const resultData = await cbFunction(url); 
-  let end = performance.now()
-  let duration = (end - start).toFixed(2);
-  let result = {duration: duration, data: resultData};
-  return result;
-}
-
-/**
  * Function that validates the cache
- * @param {object} object data
+ * @param {object} data
  * @return {object} object cache value (keys: ttl, data) if in cache and valid, null if not
  */
 async function validateCache(cache, uniqueKey, data) {
@@ -97,10 +62,76 @@ async function validateCache(cache, uniqueKey, data) {
   } else return data;
 }
 
+/**
+ * Function to Retreive data from Cache
+ * @param {func} func
+ * @return {object} Object containing the resulting data from the cache
+ */
+function memoizer(func) {
+  var cache = localforage.createInstance({
+    name: "fetchRequests",
+  });
+
+  return async function (url, reqbody) {
+    let uniqueKey;
+    if (!reqbody) uniqueKey = generateKey(url);
+    else uniqueKey = generateKey(url, reqbody);
+
+    const cacheResult = await cache.getItem(uniqueKey).then((data) => {
+      if (!data) return null;
+      // needs to return data if valid and null if not;
+      return validateCache(cache, uniqueKey, data);
+    });
+
+    if (!cacheResult) {
+      let apiResult;
+      if (!reqbody) apiResult = await func(url);
+      else apiResult = await func(url, reqbody);
+      const value = { ttl: Date.now() + 5000, data: apiResult };
+      await cache.setItem(uniqueKey, value);
+      return value.data;
+    }
+
+    // Take from cache and return the data value
+    return cacheResult.data;
+  };
+}
+
+/**
+ * Function that starts the caching process
+ * @param {function} cbFunction
+ * @param {string} uniqueKey The URL to which request is made to
+ * @return {object} object containing the duration and the resulting data from executing the request
+ */
+async function GetRequest(cbFunction, url) {
+  let start = performance.now();
+  const resultData = await cbFunction(url);
+  let end = performance.now();
+  let duration = (end - start).toFixed(2);
+  let result = { duration: duration, data: resultData };
+  return result;
+}
+
+/**
+ * Function that posts
+ * @param {function} cbFunction callback function - function returned by memoizer
+ * @param {string} uniqueKey The URL to which request is made to
+ * @param {object} body
+ * @return {object} object containing the duration and the resulting data from executing the request
+ */
+async function PostRequest(cbFunction, url, reqbody) {
+  let start = performance.now();
+  const resultData = await cbFunction(url, reqbody);
+  let end = performance.now();
+  let duration = (end - start).toFixed(2);
+  let result = { duration: duration, data: resultData };
+  return result;
+}
+
 // Testing GET requests
 async function testMultipleRequests() {
   const test = memoizer(getFetchRequest);
-  const url = 'https://thps.vercel.app/api/skaters';
+  const url = "https://thps.vercel.app/api/skaters";
 
   console.log("First Request");
   const response1 = await GetRequest(test, url);
@@ -117,11 +148,19 @@ async function testMultipleRequests() {
     const response3 = await GetRequest(test, url);
     console.log("Data:", response3.data);
     console.log("Duration:", response3.duration, "ms");
-  }, 6000)
+  }, 6000);
+
+  console.log("Fourth Request");
+  const response4 = await PostRequest(test, url, {
+    method: 'POST',
+    body: {username: 'codesmith', password: 'password'}
+  });
+  console.log("Data:", response4.data);
+  console.log("Duration:", response4.duration, "ms");
+
 }
 
 testMultipleRequests();
-
 
 /*//TO-DO: Add LRU & TTL Validation
 async function validateCache() {
