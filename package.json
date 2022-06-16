@@ -36,7 +36,8 @@
   },
   "homepage": "https://github.com/oslabs-beta/flachejs#readme",
   "dependencies": {
-    "localforage": "^1.10.0"
+    "localforage": "^1.10.0",
+    "md5": "^2.3.0"
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.5.0",
