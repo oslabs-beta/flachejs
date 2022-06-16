@@ -1,4 +1,5 @@
 import localforage from 'localforage';
+import generateKey from './helpers/generateKey';
 
 const store = localforage.createInstance({
   name: 'httpCache',
@@ -47,16 +48,24 @@ function memoizer(func) {
     name: "fetchRequests"
   });
 
-  return async function (uniqueKey) {
-    const cacheResult = await cache.getItem(uniqueKey);
+  return async function (url) {
+    const uniqueKey = generateKey(url);
+    const cacheResult = await cache.getItem(uniqueKey)
+      .then(data => {
+        if (!data) return null; 
+        // needs to return data if valid and null if not; 
+        return validateCache(cache, uniqueKey, data);
+      });
+    
     if (!cacheResult) {
-      const apiResult = await func(uniqueKey);
-      await cache.setItem(uniqueKey, apiResult)
-      return apiResult; 
+      const apiResult = await func(url);
+      const value = {ttl: Date.now() + 5000, data: apiResult};
+      await cache.setItem(uniqueKey, value);
+      return value.data; 
     }
 
     // Take from cache and return the data value
-    return cacheResult; 
+    return cacheResult.data; 
   }
 }
 
@@ -64,31 +73,72 @@ function memoizer(func) {
  * Function that starts the caching process
  * @param {function} cbFunction 
  * @param {string} uniqueKey The URL to which request is made to 
- * @return {object} Object containing the duration and the resulting data from executing the request
+ * @return {object} object containing the duration and the resulting data from executing the request
  */
-async function GetRequest(cbFunction, uniqueKey) {
+async function GetRequest(cbFunction, url) {
   let start = performance.now();
-  const resultData = await cbFunction(uniqueKey); 
+  const resultData = await cbFunction(url); 
   let end = performance.now()
   let duration = (end - start).toFixed(2);
   let result = {duration: duration, data: resultData};
   return result;
 }
 
+/**
+ * Function that validates the cache
+ * @param {object} object data
+ * @return {object} object cache value (keys: ttl, data) if in cache and valid, null if not
+ */
+async function validateCache(cache, uniqueKey, data) {
+  if (data.ttl < Date.now()) {
+    //TO-DO: remove invalid item from cache
+    await cache.removeItem(uniqueKey);
+    return null;
+  } else return data;
+}
+
 // Testing GET requests
 async function testMultipleRequests() {
   const test = memoizer(getFetchRequest);
-  const uniqueKey = 'https://thps.vercel.app/api/skaters';
+  const url = 'https://thps.vercel.app/api/skaters';
 
   console.log("First Request");
-  const response1 = await GetRequest(test, uniqueKey);
+  const response1 = await GetRequest(test, url);
   console.log("Data:", response1.data);
   console.log("Duration:", response1.duration, "ms");
 
   console.log("Second Request");
-  const response2 = await GetRequest(test, uniqueKey);
+  const response2 = await GetRequest(test, url);
   console.log("Data:", response2.data);
   console.log("Duration:", response2.duration, "ms");
+
+  setTimeout(async () => {
+    console.log("Third Request");
+    const response3 = await GetRequest(test, url);
+    console.log("Data:", response3.data);
+    console.log("Duration:", response3.duration, "ms");
+  }, 6000)
 }
 
 testMultipleRequests();
+
+
+/*//TO-DO: Add LRU & TTL Validation
+async function validateCache() {
+  //while DLL.tail.TTL is not valid
+    //delete hashmap entry
+    //move DLL.tail to DLL.tail.prev
+    //request to node.query for updated information
+    //.then save to new LLNode
+    //.then save key and ref of new node to hashmap
+    //delete invalidated node
+}
+
+async function getCache(key) {
+  await validateCache();
+  //check in cache hashmap for key
+  //check referenced DLL node
+  //change refs of prev and next nodes to each other
+  //move new node to DLL.tail, update tail
+  //return value
+}*/
