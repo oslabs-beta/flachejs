@@ -4,8 +4,7 @@
   "description": "",
   "main": "src/flache.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack serve --open"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -37,11 +36,5 @@
   "homepage": "https://github.com/oslabs-beta/flachejs#readme",
   "dependencies": {
     "localforage": "^1.10.0"
-  },
-  "devDependencies": {
-    "html-webpack-plugin": "^5.5.0",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.9.2"
   }
 }
