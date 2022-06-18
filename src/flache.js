@@ -1,183 +1,128 @@
-import localforage from "localforage";
-import generateKey from "./helpers/generateKey";
-
-const store = localforage.createInstance({
-  name: "httpCache",
-  storeName: "entries",
-  description: "A cache for client HTTP requests",
-  version: 1.0,
-});
-
-store.setItem("test", { message: "this is a test to see if this even works" });
-store.setItem("test2", [1, 2, 3]);
-// store.clear();
-//store.getItem('test').then(res => console.log(res))
-
-/* 
-REMAINING NOTES FOR GET FETCH REQUEST FUNCTIONS
-Still to do: 
-- Change it to accept parameters like a usual Fetch Request
-- This will probably take the same arguments as the standard fetch request, but will execute logic/helper functions before returning data to the client. 
-- Take in key from jasmairs function: value is data response from fetch request
-- This should take a request and transform it into a valid entry for the DB
-- Add a TTL component to response too
-- Should probably send some kind of success note or failure notice.  */
+import localforage from 'localforage';
+import flacheRequest from './helpers/memoizer';
+import generateKey from './helpers/generateKey';
+import validateCache from './helpers/validateCache';
+import getFetchRequest from './helpers/serverRequest';
 
 /**
- * Function that makes a Fetch request to the server
- * @param {string} url URL to where fetch request is being made
- * @return {object} Object containing the resulting data from executing the request in the server
+ * clientCache will take in arguments for the Database name, The Store name, and an options object for further config options. 
+ * It will produce a class that will provide a container for our db store to attach to our flaceClient class. The store itself will provide 
+ * functionality that is outside of the scope of making requests and interfacing with the store. Some examples include - store diagnostic info,
+ * storing the total entries and (maybe) total store size approximation, and maybe some other key metrics. It will also handle
+ * 
+ *  @param {string} dbName - The name of the Database to be stored in IndexedDB. Default = httpCache
+ *  @param {string} storeName - The name of the store that will be created in the Database Default = request_response
+ *  @param {object} options - further options for configuring the store. This will include custom options for flacheJS as well as a config property for localforage
  */
-async function getFetchRequest(url, reqbody) {
-  console.log("Fetching from Server...");
-  let response;
-  if (!reqbody) {
-    response = await fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        return data;
-      })
-      .catch((err) => console.log("fetch error: ", err));
-  } else {
-    response = await fetch(url, reqbody)
-      .then((res) => res.json())
-      .then((data) => {
-        return data;
-      })
-      .catch((err) => console.log("fetch error: ", err));
+
+const defaultOptions = {
+  maxCapacity: null, // this is in development
+  ttl: 5000,
+  config: {
+    description: 'A cache for client-side http requests',
+    driver: [
+      localforage.INDEXEDDB,
+      localforage.LOCALSTORAGE,
+    ],
+    version: 1.0, 
   }
-  return response;
 }
 
-/**
- * Function that validates the cache
- * @param {object} data
- * @return {object} object cache value (keys: ttl, data) if in cache and valid, null if not
- */
-async function validateCache(cache, uniqueKey, data) {
-  if (data.ttl < Date.now()) {
-    //TO-DO: remove invalid item from cache
-    await cache.removeItem(uniqueKey);
-    return null;
-  } else return data;
-}
+class clientCache {
+  constructor(dbName = 'httpCache', storeName = 'request_response', options = defaultOptions) {
 
-/**
- * Function to Retreive data from Cache
- * @param {func} func
- * @return {object} Object containing the resulting data from the cache
- */
-function memoizer(func) {
-  var cache = localforage.createInstance({
-    name: "fetchRequests",
-  });
+    // TO-DO: check if the store exists already and create new store only if it isn't already there.
+    this.store = localforage.createInstance(({
+      name: dbName,
+      storeName: storeName,
+      ...options.config
+    }))
 
-  return async function (url, reqbody) {
-    let uniqueKey;
-    if (!reqbody) uniqueKey = generateKey(url);
-    else uniqueKey = generateKey(url, reqbody);
+    // TO-DO: same as above. 
+    this.details = localforage.createInstance({
+      name: 'cacheDetails',
+      storeName: 'requests',
+      description: 'A list of past requests',
+      version: 1.0
+    })
 
-    const cacheResult = await cache.getItem(uniqueKey).then((data) => {
-      if (!data) return null;
-      // needs to return data if valid and null if not;
-      return validateCache(cache, uniqueKey, data);
-    });
+    this.ttl = options.ttl;
+    this.maxCapacity = options.maxCapacity;
+  }
 
-    if (!cacheResult) {
-      let apiResult;
-      if (!reqbody) apiResult = await func(url);
-      else apiResult = await func(url, reqbody);
-      const value = { ttl: Date.now() + 5000, data: apiResult };
-      await cache.setItem(uniqueKey, value);
-      return value.data;
+  //
+  async getSize() {
+    const size = await this.store.keys()
+    return await size.length; 
+  }
+
+
+  setItem(key, value) {
+    const store = this.store;
+    return store.setItem(key, value, (err, value) => {
+      if (err) {
+        return err.message
+      }
+
+      return `${value} added to store`
+    })
+  }
+
+  listRequests(verbose = false) {
+    if (verbose) {
+      // print a pretty list of all requests with reverse hash.
     }
-
-    // Take from cache and return the data value
-    return cacheResult.data;
-  };
+    // return an array representaiton of requests. 
+    return;
+  }
 }
 
-/**
- * Function that starts the caching process
- * @param {function} cbFunction
- * @param {string} uniqueKey The URL to which request is made to
- * @return {object} object containing the duration and the resulting data from executing the request
- */
-async function GetRequest(cbFunction, url) {
-  let start = performance.now();
-  const resultData = await cbFunction(url);
-  let end = performance.now();
-  let duration = (end - start).toFixed(2);
-  let result = { duration: duration, data: resultData };
-  return result;
-}
+clientCache.prototype.flacheRequest = flacheRequest;
+clientCache.prototype.generateKey = generateKey;
+clientCache.prototype.validateCache = validateCache;
+clientCache.prototype.getFetchRequest = getFetchRequest;
+  
+const store = new clientCache();
 
-/**
- * Function that posts
- * @param {function} cbFunction callback function - function returned by memoizer
- * @param {string} uniqueKey The URL to which request is made to
- * @param {object} body
- * @return {object} object containing the duration and the resulting data from executing the request
- */
-async function PostRequest(cbFunction, url, reqbody) {
-  let start = performance.now();
-  const resultData = await cbFunction(url, reqbody);
-  let end = performance.now();
-  let duration = (end - start).toFixed(2);
-  let result = { duration: duration, data: resultData };
-  return result;
-}
+(async () => {
+  const url = 'https://thps.vercel.app/api/skaters';
 
-// Testing GET requests
-async function testMultipleRequests() {
-  const test = memoizer(getFetchRequest);
-  const url = "https://thps.vercel.app/api/skaters";
+  const now = performance.now();
+  const data = await store.flacheRequest(url)
+  const test1 = performance.now();
+  console.log(data);
+  console.log('Fetched in : ', Math.abs(now - test1).toFixed(2));
 
-  console.log("First Request");
-  const response1 = await GetRequest(test, url);
-  console.log("Data:", response1.data);
-  console.log("Duration:", response1.duration, "ms");
+  const now2 = performance.now();
+  const data2 = await store.flacheRequest(url);
+  const test2 = performance.now();
+  console.log(data2);
+  console.log('Fetched in : ', Math.abs(now2 - test2).toFixed(2));
 
-  console.log("Second Request");
-  const response2 = await GetRequest(test, url);
-  console.log("Data:", response2.data);
-  console.log("Duration:", response2.duration, "ms");
-
-  setTimeout(async () => {
-    console.log("Third Request");
-    const response3 = await GetRequest(test, url);
-    console.log("Data:", response3.data);
-    console.log("Duration:", response3.duration, "ms");
-  }, 6000);
-
-  console.log("Fourth Request");
-  const response4 = await PostRequest(test, url, {
+  const now3 = performance.now();
+  const data3 = await store.flacheRequest(url, {
     method: 'POST',
-    body: {username: 'codesmith', password: 'password'}
+    body: JSON.stringify({user: 'jake', pw:'teamFlacheGo!'})
   });
-  console.log("Data:", response4.data);
-  console.log("Duration:", response4.duration, "ms");
+  const test3 = performance.now();
+  console.log(data3);
+  console.log('Fetched in : ', Math.abs(now3 - test3).toFixed(2));
 
-}
+  store.getSize().then(data => console.log('collection size', data));
+})();
 
-testMultipleRequests();
 
-/*//TO-DO: Add LRU & TTL Validation
-async function validateCache() {
-  //while DLL.tail.TTL is not valid
-    //delete hashmap entry
-    //move DLL.tail to DLL.tail.prev
-    //request to node.query for updated information
-    //.then save to new LLNode
-    //.then save key and ref of new node to hashmap
-    //delete invalidated node
-}
+// store.setItem('test', { message: 'this is a test to see if this even works' });
+// store.setItem('test2', [1,2,3]);
 
-async function getCache(key) {
-  await validateCache();
-  //check in cache hashmap for key
-  //check referenced DLL node
-  //change refs of prev and next nodes to each other
-  //move new node to DLL.tail, update tail
-  //return value
-}*/
+// // store.clear();
+// store.getItem('test').then(res => console.log(res))
+
+// async function Flache() {}
+
+// module.exports = {Flache}
+
+
+
+  // fetch request methods, validation, 
+
