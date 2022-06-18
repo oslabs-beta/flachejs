@@ -4,6 +4,10 @@
  * @return {object} Object containing the resulting data from executing the request in the server
  */
 
+{
+  mode: 'cors'
+}
+
  async function getFetchRequest(url, options) {
    console.log("Fetching from Server...");
       
