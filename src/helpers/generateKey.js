@@ -25,7 +25,10 @@ import md5 from 'md5';
 * @return {string} - Hashed key
 **/
 
-const generateKey = (url, data = {method: 'GET'}) => {
+
+
+const generateKey = (url, data = defaultHeaders) => {
+
   // TO-DO error handling for incorrect method
   const method = data.method.toUpperCase();
   if (method === 'GET') {

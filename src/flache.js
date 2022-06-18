@@ -1,5 +1,5 @@
 import localforage from 'localforage';
-import flacheRequest from './helpers/memoizer';
+import flacheRequest from './helpers/flacheRequest';
 import generateKey from './helpers/generateKey';
 import validateCache from './helpers/validateCache';
 import getFetchRequest from './helpers/serverRequest';
@@ -19,6 +19,8 @@ const defaultOptions = {
   maxCapacity: null, // this is in development
   ttl: 5000,
   config: {
+    name: 'httpCache',
+    storeName: 'request_response',
     description: 'A cache for client-side http requests',
     driver: [
       localforage.INDEXEDDB,
@@ -29,12 +31,11 @@ const defaultOptions = {
 }
 
 class clientCache {
-  constructor(dbName = 'httpCache', storeName = 'request_response', options = defaultOptions) {
+  constructor(options = defaultOptions) {
 
     // TO-DO: check if the store exists already and create new store only if it isn't already there.
     this.store = localforage.createInstance(({
-      name: dbName,
-      storeName: storeName,
+      ...defaultOptions.config,
       ...options.config
     }))
 
@@ -46,8 +47,9 @@ class clientCache {
       version: 1.0
     })
 
-    this.ttl = options.ttl;
+    this.ttl = options.ttl || defaultOptions.ttl;
     this.maxCapacity = options.maxCapacity;
+    console.log('store initiated ttl is:', this.ttl)
   }
 
   //
@@ -82,33 +84,59 @@ clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
   
-const store = new clientCache();
+const store = new clientCache({
+  ttl: 200
+});
 
 (async () => {
-  const url = 'https://thps.vercel.app/api/skaters';
+  const url = 'https://api.publicapis.org/entries';
 
+  // with cache;
   const now = performance.now();
-  const data = await store.flacheRequest(url)
+
+  for (let i = 0; i < 500; i++) {
+    await store.flacheRequest(url, {
+      mode: 'cors'
+    })
+  }
+
   const test1 = performance.now();
-  console.log(data);
-  console.log('Fetched in : ', Math.abs(now - test1).toFixed(2));
+
+  console.log('performed 50 requests in ', Math.abs(now - test1).toFixed(2), ' ms');
 
   const now2 = performance.now();
-  const data2 = await store.flacheRequest(url);
+
+  for (let i = 0; i < 50; i++) {
+    await fetch(url, {mode: 'cors'}); 
+  }
+
   const test2 = performance.now();
-  console.log(data2);
-  console.log('Fetched in : ', Math.abs(now2 - test2).toFixed(2));
+  console.log('perfomred 5 requests without cache in ', Math.abs(now2 - test2).toFixed(2), ' ms')
 
-  const now3 = performance.now();
-  const data3 = await store.flacheRequest(url, {
-    method: 'POST',
-    body: JSON.stringify({user: 'jake', pw:'teamFlacheGo!'})
-  });
-  const test3 = performance.now();
-  console.log(data3);
-  console.log('Fetched in : ', Math.abs(now3 - test3).toFixed(2));
 
-  store.getSize().then(data => console.log('collection size', data));
+  // const now = performance.now();
+  // const data = await store.flacheRequest(url)
+  // const test1 = performance.now();
+  // console.log(data);
+  // console.log('Fetched in : ', Math.abs(now - test1).toFixed(2));
+
+  // const now2 = performance.now();
+  // const data2 = await store.flacheRequest(url);
+  // const test2 = performance.now();
+  // console.log(data2);
+  // console.log('Fetched in : ', Math.abs(now2 - test2).toFixed(2));
+
+  // const now3 = performance.now();
+  // const data3 = await store.flacheRequest(url, {
+  //   method: 'POST',
+  //   body: JSON.stringify({user: 'jake', pw:'teamFlacheGo!'})
+  // });
+
+  // const test3 = performance.now();
+  // console.log(data3);
+  // console.log('Fetched in : ', Math.abs(now3 - test3).toFixed(2));
+
+  // store.getSize().then(data => console.log('collection size', data));
 })();
 
 
