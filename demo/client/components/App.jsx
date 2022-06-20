@@ -1,6 +1,9 @@
 import React, { Component, useState } from "react";
 import BookDisplay from "./BookDisplay.jsx";
+import flacheClient from '../../../dist/bundle.js';
+import localforage from "localforage";
 
+const store = new flacheClient({ ttl: 10000 });
 
 function memoizer(func) {
   let cache = new Map();
@@ -63,7 +66,7 @@ const App = (props) => {
         <button type="button" onClick={getAllBooks}>Get All Books</button>
         <button type="button" onClick={async () => {
           let start = performance.now()
-          const allBooks = await test('/bookshelf')
+          const allBooks = await store.flacheRequest('/bookshelf');
           let end = performance.now()
           setTime((end - start).toFixed(2));
           console.log("Duration: ", (end - start).toFixed(2), "ms");
