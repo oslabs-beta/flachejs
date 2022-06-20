@@ -17,7 +17,6 @@ module.exports = {
       template:'index.html'
     })
   ],
-
   devServer: {
     compress: true,
     port: 8080,

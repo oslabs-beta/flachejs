@@ -69,6 +69,8 @@ async function testMultipleRequests() {
 
 testMultipleRequests();
 
+module.exports = {GetRequest, PostRequest} 
+
 /*//TO-DO: Add LRU & TTL Validation
 async function validateCache() {
   //while DLL.tail.TTL is not valid

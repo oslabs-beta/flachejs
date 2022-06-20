@@ -15,7 +15,8 @@ const defaultOptions = {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     redirect: 'follow',
-    referrerPolicy: 'no-referrer-when-downgrade', 
+  referrerPolicy: 'no-referrer-when-downgrade',
+    body: null,
   }
   
 
@@ -27,9 +28,7 @@ const flacheRequest = async function (url, options) {
     ...options
   }
   
-  let uniqueKey;
-  if (!options) uniqueKey = generateKey(url);
-  else uniqueKey = generateKey(url, options);
+  let uniqueKey = generateKey(url, options)
 
    const cacheResult = await this.store.getItem(uniqueKey)
      .then((data) => {
@@ -44,11 +43,17 @@ const flacheRequest = async function (url, options) {
 
   if (!cacheResult) {
     const apiResult = await this.getFetchRequest(url, options);
-    console.log('setting ttl', this.ttl)
-    const value = { ttl: Date.now() + this.ttl, data: apiResult };
-    await this.store.setItem(uniqueKey, value);
+    console.log(apiResult)
+
+    // if no data returned - should we try again or return an error? 
+    if (!apiResult) {
+      return null;
+    }
+
+    apiResult.ttl = Date.now() + this.ttl
+    await this.store.setItem(uniqueKey, apiResult);
     // this is where we would potetniall trigger evictions
-    return value.data;
+    return apiResult.data;
   }
    
   return cacheResult.data;

@@ -27,14 +27,14 @@ import md5 from 'md5';
 
 
 
-const generateKey = (url, data = defaultHeaders) => {
-
+const generateKey = (url, data) => {
   // TO-DO error handling for incorrect method
   const method = data.method.toUpperCase();
   if (method === 'GET') {
     return (`${method}/${url}`);
   }
   if (method === 'POST') {
+    if (!Object.hasOwn(data, 'body')) throw new Error('Must include a body with POST request');
     return (`${method}/${md5(JSON.stringify(data.body))}/${url}`);
   }
 }
