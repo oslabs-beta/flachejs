@@ -84,34 +84,41 @@ clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
   
-const store = new clientCache({
-  ttl: 200
-});
+const store = new clientCache({ttl: 20000});
+
 
 (async () => {
-  const url = 'https://api.publicapis.org/entries';
+  let url = 'https://swapi.dev/api/people';
 
   // with cache;
   const now = performance.now();
 
-  for (let i = 0; i < 500; i++) {
-    await store.flacheRequest(url, {
-      mode: 'cors'
-    })
+  for (let i = 0; url; i++) {
+    const data = await store.flacheRequest(url);
+    console.log(data);
+    url = data.next; 
   }
 
   const test1 = performance.now();
+  
+  console.log('performed 5 requests wihtout cache in ', Math.abs(now - test1).toFixed(2), ' ms');
 
-  console.log('performed 50 requests in ', Math.abs(now - test1).toFixed(2), ' ms');
-
+  url = 'https://swapi.dev/api/people'
   const now2 = performance.now();
-
-  for (let i = 0; i < 50; i++) {
-    await fetch(url, {mode: 'cors'}); 
+  
+  for (let i = 0; url; i++) {
+    const data = await store.flacheRequest(url);
+    console.log(data);
+    url = data.next; 
   }
+  
+    const test2 = performance.now();
+    console.log('perfomred 5 requests with cache in ', Math.abs(now2 - test2).toFixed(2), ' ms')
+  
 
-  const test2 = performance.now();
-  console.log('perfomred 5 requests without cache in ', Math.abs(now2 - test2).toFixed(2), ' ms')
+  // for (let i = 0; i < 5; i++) {
+  //   await fetch(url); 
+  // }
 
 
   // const now = performance.now();
@@ -152,5 +159,8 @@ const store = new clientCache({
 
 
 
-  // fetch request methods, validation, 
+  // fetch request methods, validation,
+
+  
+  export default clientCache
 
