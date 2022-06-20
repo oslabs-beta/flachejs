@@ -83,68 +83,70 @@ clientCache.prototype.flacheRequest = flacheRequest;
 clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
+
+export default clientCache
   
-const store = new clientCache({ttl: 20000});
+// const store = new clientCache({ttl: 20000});
 
 
-(async () => {
-  let url = 'https://swapi.dev/api/people';
+// (async () => {
+//   let url = 'https://swapi.dev/api/people';
 
-  // with cache;
-  const now = performance.now();
+//   // with cache;
+//   const now = performance.now();
 
-  for (let i = 0; url; i++) {
-    const data = await store.flacheRequest(url);
-    console.log(data);
-    url = data.next; 
-  }
+//   for (let i = 0; url; i++) {
+//     const data = await store.flacheRequest(url);
+//     console.log(data);
+//     url = data.next; 
+//   }
 
-  const test1 = performance.now();
+//   const test1 = performance.now();
   
-  console.log('performed 5 requests wihtout cache in ', Math.abs(now - test1).toFixed(2), ' ms');
+//   console.log('performed 5 requests wihtout cache in ', Math.abs(now - test1).toFixed(2), ' ms');
 
-  url = 'https://swapi.dev/api/people'
-  const now2 = performance.now();
+//   url = 'https://swapi.dev/api/people'
+//   const now2 = performance.now();
   
-  for (let i = 0; url; i++) {
-    const data = await store.flacheRequest(url);
-    console.log(data);
-    url = data.next; 
-  }
+//   for (let i = 0; url; i++) {
+//     const data = await store.flacheRequest(url);
+//     console.log(data);
+//     url = data.next; 
+//   }
   
-    const test2 = performance.now();
-    console.log('perfomred 5 requests with cache in ', Math.abs(now2 - test2).toFixed(2), ' ms')
+//     const test2 = performance.now();
+//     console.log('perfomred 5 requests with cache in ', Math.abs(now2 - test2).toFixed(2), ' ms')
   
 
-  // for (let i = 0; i < 5; i++) {
-  //   await fetch(url); 
-  // }
+//   // for (let i = 0; i < 5; i++) {
+//   //   await fetch(url); 
+//   // }
 
 
-  // const now = performance.now();
-  // const data = await store.flacheRequest(url)
-  // const test1 = performance.now();
-  // console.log(data);
-  // console.log('Fetched in : ', Math.abs(now - test1).toFixed(2));
+//   // const now = performance.now();
+//   // const data = await store.flacheRequest(url)
+//   // const test1 = performance.now();
+//   // console.log(data);
+//   // console.log('Fetched in : ', Math.abs(now - test1).toFixed(2));
 
-  // const now2 = performance.now();
-  // const data2 = await store.flacheRequest(url);
-  // const test2 = performance.now();
-  // console.log(data2);
-  // console.log('Fetched in : ', Math.abs(now2 - test2).toFixed(2));
+//   // const now2 = performance.now();
+//   // const data2 = await store.flacheRequest(url);
+//   // const test2 = performance.now();
+//   // console.log(data2);
+//   // console.log('Fetched in : ', Math.abs(now2 - test2).toFixed(2));
 
-  // const now3 = performance.now();
-  // const data3 = await store.flacheRequest(url, {
-  //   method: 'POST',
-  //   body: JSON.stringify({user: 'jake', pw:'teamFlacheGo!'})
-  // });
+//   // const now3 = performance.now();
+//   // const data3 = await store.flacheRequest(url, {
+//   //   method: 'POST',
+//   //   body: JSON.stringify({user: 'jake', pw:'teamFlacheGo!'})
+//   // });
 
-  // const test3 = performance.now();
-  // console.log(data3);
-  // console.log('Fetched in : ', Math.abs(now3 - test3).toFixed(2));
+//   // const test3 = performance.now();
+//   // console.log(data3);
+//   // console.log('Fetched in : ', Math.abs(now3 - test3).toFixed(2));
 
-  // store.getSize().then(data => console.log('collection size', data));
-})();
+//   // store.getSize().then(data => console.log('collection size', data));
+// })();
 
 
 // store.setItem('test', { message: 'this is a test to see if this even works' });
@@ -162,5 +164,5 @@ const store = new clientCache({ttl: 20000});
   // fetch request methods, validation,
 
   
-  export default clientCache
+  
 
