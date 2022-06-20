@@ -1,0 +1,90 @@
+html, body {
+  
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.header {
+  flex: 0 1 auto;
+}
+.app {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+main {
+  height: 100%;
+}
+
+h1,h2, h5 {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  /* color: $darkbrown; */
+}
+
+.cacheContainer {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cacheDisplay {
+  text-align: center;
+}
+
+button {
+  text-align: center;
+  /* background-color: $blue; */
+  /* color: $lightbrown; */
+  font-size: 15px;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+}
+
+.booksContainer {
+  /* background-color: $mediumbrown; */
+  /* color: $blue; */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+article {
+  box-sizing: border-box;
+}
+
+.bookImgContainer {
+  box-sizing: border-box;
+  justify-self: center;
+  align-self: center;
+  img {
+    object-fit: scale-down;
+    max-height: 200px;
+    width: auto;
+    display:block;
+    margin:auto;
+  }
+}
+
+.bookDetail {
+  display: flex;
+  font-size: 13px;
+  text-align: center;
+}
+
+.bookLabel {
+  list-style: none;
+  margin: 0;
+}

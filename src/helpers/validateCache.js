@@ -5,7 +5,7 @@
  */
 
 async function validateCache(uniqueKey, data) {
-  console.log(data.ttl, Date.now());
+  // console.log(data.ttl, Date.now());
    if (data.ttl < Date.now()) {
       console.log('cache miss', data.ttl)
       // TO-DO: remove invalid item from cache and remove all? 
