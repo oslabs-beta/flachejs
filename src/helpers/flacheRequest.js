@@ -43,8 +43,7 @@ const flacheRequest = async function (url, options) {
 
   if (!cacheResult) {
     const apiResult = await this.getFetchRequest(url, options);
-    console.log(apiResult)
-
+    
     // if no data returned - should we try again or return an error? 
     if (!apiResult) {
       return null;
