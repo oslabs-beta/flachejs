@@ -1,35 +1,8 @@
 import React, { Component, useState } from "react";
 import BookDisplay from "./BookDisplay.jsx";
 import flacheClient from '../../../dist/bundle.js';
-import localforage from "localforage";
 
 const store = new flacheClient({ ttl: 10000 });
-
-function memoizer(func) {
-  let cache = new Map();
-
-  return async function (request) {
-    console.log("Cache before functionality: ", cache);
-    //If not in cache, make fetch request to server and add to cache
-    if (!cache.has(request)) {
-      console.log('Fetching from server and adding to cache');
-      let response = await func(request);
-      cache.set(request, response);
-    }
-    //Now return data from cache
-    return cache.get(request);
-  };
-}
-
-/* async function getAllBooksTest(url) {
-  let response = await fetch(url)
-    .then((res) => res.json())
-    .then((data) => { return data; })
-    .catch((err) => console.log('bookshelf fetch error: ', err));
-  return response;
-} */
-
-/* const test = memoizer(getAllBooksTest);  */// returns a new function that will check Cache before executing function;
 
 const App = (props) => {
   const [books, setBooks] = useState(null);
