@@ -67,7 +67,7 @@ const App = (props) => {
     <main>
       <div className="cacheContainer">
       <label for="category">Choose a book category:</label>
-      <select className="book-category">
+      <select id="book-category">
         <option value='all'>All Books</option>
         <option value='microsoft'>Microsoft</option>
         <option value='python'>Python</option>
