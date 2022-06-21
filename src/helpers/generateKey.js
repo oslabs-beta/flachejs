@@ -39,6 +39,4 @@ const generateKey = (url, data) => {
   }
 }
 
-fetch('url', {})
-
 export default generateKey;
