@@ -53,25 +53,27 @@ const App = (props) => {
 
   function displayBooks(data) {
     bookList = data.reduce((acc, elem, i) => {
-      acc.push(<BookDisplay data={elem} key={i}/>);
+      acc.push(<BookDisplay data={elem} key={i} />);
       return acc;
     }, []);
     setBooks(bookList)
   }
-  
+
   return (
     <main>
       <div className="cacheContainer">
-        {time && <p className="cacheDisplay">{`Fetched in ${time} ms`}</p>}
-        <button type="button" onClick={getAllBooks}>Get All Books</button>
-        <button type="button" onClick={async () => {
-          let start = performance.now()
-          const allBooks = await store.flacheRequest('/bookshelf');
-          let end = performance.now()
-          setTime((end - start).toFixed(2));
-          console.log("Duration: ", (end - start).toFixed(2), "ms");
-          displayBooks(allBooks);
-        }}> Get All Books Test 2 </button>
+        {time && <p className="cacheDisplay">{`Request Duration: ${time} ms`}</p>}
+        <div className="cacheBtnContainer">
+          <button type="button" className="getBtn" onClick={getAllBooks}>No Flache</button>
+          <button type="button" className="getBtn" onClick={async () => {
+            let start = performance.now()
+            const allBooks = await store.flacheRequest('/bookshelf');
+            let end = performance.now()
+            setTime((end - start).toFixed(2));
+            console.log("Duration: ", (end - start).toFixed(2), "ms");
+            displayBooks(allBooks);
+          }}>Cache with Flache</button>
+        </div>
       </div>
       <div className="booksContainer">{books}</div>
     </main>

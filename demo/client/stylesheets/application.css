@@ -1,5 +1,7 @@
-html, body {
-  
+html,
+body {
+  background-color: #ffe278;
+  background-image: url("background.png")
 }
 
 html {
@@ -11,22 +13,32 @@ body {
   display: flex;
   flex-direction: column;
 }
+
 .header {
   flex: 0 1 auto;
 }
+
 .app {
   flex: 1 1 auto;
   min-height: 0;
 }
+
 main {
   height: 100%;
 }
 
-h1,h2, h5 {
+h1,
+h2,
+h5 {
   text-align: center;
   padding: 0;
   margin: 0;
-  /* color: $darkbrown; */
+  color: black;
+  font-family: "Fantasy"
+}
+
+#title {
+  margin-top: 20px;
 }
 
 .cacheContainer {
@@ -39,16 +51,129 @@ h1,h2, h5 {
 
 .cacheDisplay {
   text-align: center;
+  padding: 8px;
+  border: 3px solid #ee826c;
+  background-color: rgb(238, 130, 108, 0.5);
+  /* color: #ffe278; */
+  font-size: 20px;
+  border-radius: 12px;
+}
+
+.cacheBtnContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+
 }
 
 button {
   text-align: center;
-  /* background-color: $blue; */
-  /* color: $lightbrown; */
+  background-color: #ee826c;
+  color: #ffe278;
   font-size: 15px;
   padding: 8px;
   border-radius: 10px;
   border: none;
+  margin: 10px;
+}
+
+
+button,
+button::after {
+  font-size: 20px;
+  font-family: "Fantasy";
+  background: linear-gradient(45deg, transparent 5%, #FF013C 5%);
+  border: 0;
+  color: #fff;
+  /* letter-spacing: 3px; */
+  /* line-height: 88px; */
+  padding: 8px;
+  box-shadow: 6px 0px 0px #00E6F6;
+  outline: transparent;
+  position: relative;
+}
+
+button::after {
+  --slice-0: inset(50% 50% 50% 50%);
+  --slice-1: inset(80% -6px 0 0);
+  --slice-2: inset(50% -6px 30% 0);
+  --slice-3: inset(10% -6px 85% 0);
+  --slice-4: inset(40% -6px 43% 0);
+  --slice-5: inset(80% -6px 5% 0);
+
+  content: 'AVAILABLE NOW';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 3%, #00E6F6 3%, #00E6F6 5%, #FF013C 5%);
+  text-shadow: -3px -3px 0px #F8F005, 3px 3px 0px #00E6F6;
+  clip-path: var(--slice-0);
+}
+
+button:hover::after {
+  animation: 1s glitch;
+  animation-timing-function: steps(2, end);
+}
+
+@keyframes glitch {
+  0% {
+    clip-path: var(--slice-1);
+    transform: translate(-20px, -10px);
+  }
+
+  10% {
+    clip-path: var(--slice-3);
+    transform: translate(10px, 10px);
+  }
+
+  20% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 10px);
+  }
+
+  30% {
+    clip-path: var(--slice-3);
+    transform: translate(0px, 5px);
+  }
+
+  40% {
+    clip-path: var(--slice-2);
+    transform: translate(-5px, 0px);
+  }
+
+  50% {
+    clip-path: var(--slice-3);
+    transform: translate(5px, 0px);
+  }
+
+  60% {
+    clip-path: var(--slice-4);
+    transform: translate(5px, 10px);
+  }
+
+  70% {
+    clip-path: var(--slice-2);
+    transform: translate(-10px, 10px);
+  }
+
+  80% {
+    clip-path: var(--slice-5);
+    transform: translate(20px, -10px);
+  }
+
+  90% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 0px);
+  }
+
+  100% {
+    clip-path: var(--slice-1);
+    transform: translate(0);
+  }
 }
 
 .booksContainer {
@@ -65,23 +190,28 @@ article {
   box-sizing: border-box;
 }
 
+.bookDisplay {
+  border: 3px solid #ee826c;
+  background-color: rgb(238, 130, 108, 0.5);
+}
+
 .bookImgContainer {
   box-sizing: border-box;
   justify-self: center;
   align-self: center;
-  img {
-    object-fit: scale-down;
-    max-height: 200px;
-    width: auto;
-    display:block;
-    margin:auto;
-  }
+}
+
+.bookImg {
+  object-fit: scale-down;
+  max-height: 200px;
+  width: auto;
+  display: block;
+  margin: auto;
 }
 
 .bookDetail {
   display: flex;
   font-size: 13px;
-  text-align: center;
 }
 
 .bookLabel {
