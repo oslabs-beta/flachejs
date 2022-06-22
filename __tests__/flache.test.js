@@ -1,5 +1,7 @@
 import clientCache from '../src/flache';
 import fetchMock from 'jest-fetch-mock';
+
+// setting indexeddv method up for mocking. 
 require('fake-indexeddb/auto');
 
 describe('Mock Store Tests', () => {
