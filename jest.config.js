@@ -1,4 +1,4 @@
 module.exports = {
-  // "collectCoverage": true,
-  "verbose": true
+  "verbose": true,
+  "testEnvironment": "jest-environment-jsdom",
 }

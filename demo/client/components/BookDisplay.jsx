@@ -11,6 +11,8 @@ const BookDisplay = props => {
       <ul className="bookLabel">
         <li className="bookDetail"><strong>{data.title}</strong></li>
         <li className="bookDetail"><em>{data.subtitle}</em></li>
+        <li className="bookDetail">Category: {data.category}</li>
+        <li className="bookDetail">Price: {data.price}</li>
       </ul>
     </article>
   );
