@@ -34,6 +34,36 @@ describe('Mock Store Tests', () => {
     cache.store.clear(); 
   })
 
+  test('Cache should have a store', async () => {
+    expect(Object.hasOwn(cache, 'store')).toEqual(true); 
+  })
+
+  test('Cache should have details', async () => {
+    expect(Object.hasOwn(cache, 'details')).toEqual(true); 
+  })
+
+  test('Cache should have a default ttl of 5000ms', async () => {
+    expect(Object.hasOwn(cache, 'ttl')).toEqual(true); 
+    expect(cache.ttl).toEqual(5000); 
+  })
+
+  test('Cache ttl should be configurable', async () => {
+    const newCache = new clientCache({ ttl: 10000 });
+    expect(Object.hasOwn(newCache, 'ttl')).toEqual(true); 
+    expect(newCache.ttl).toEqual(10000); 
+  })
+
+  test('Cache should have details', async () => {
+    expect(Object.hasOwn(cache, 'details')).toEqual(true); 
+  })
+
+  test('Cache should have appropriate functions available', async () => {
+    expect(typeof cache.flacheRequest).toEqual('function'); 
+    expect(typeof cache.validateCache).toEqual('function'); 
+    expect(typeof cache.getFetchRequest).toEqual('function'); 
+    expect(typeof cache.generateKey).toEqual('function'); 
+  })
+
   test('Fetch requests should be stored to cache', async () => {
     fetchMock.mockResponseOnce(JSON.stringify(mockResults));
     expect(await cache.store.getItem('GET/programmers')).toBe(null);
