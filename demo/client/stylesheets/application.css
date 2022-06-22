@@ -42,7 +42,7 @@ h5 {
 }
 
 .cacheContainer {
-  margin-top: 10px;
+  margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;

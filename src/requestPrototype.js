@@ -1,8 +1,14 @@
-import localforage from "localforage";
 import generateKey from "./helpers/generateKey";
 import getFetchRequest from "./helpers/serverRequest";
 import memoizer from "./helpers/memoizer";
 import validateCache from "./helpers/validateCache";
+
+/**
+ * The localforage module
+ * @external "localforage"
+ * @see {@link https://www.npmjs.com/package/localforage}
+ */
+import localforage from "localforage";
 
 /**
  * Function that starts the caching process
