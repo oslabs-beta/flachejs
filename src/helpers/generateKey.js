@@ -26,7 +26,9 @@ import md5 from 'md5';
 **/
 
 
-
+      // TO-DO consider including headers in our hashing strategy? If a POST request is made with different headers its conceivable that
+      // the expected repsonse would be different; 
+      
 const generateKey = (url, data) => {
   // TO-DO error handling for incorrect method
   const method = data.method.toUpperCase();

@@ -39,7 +39,7 @@ const App = (props) => {
   return (
     <main>
       <div className="cacheContainer">
-      <label for="category">Choose a book category:</label>
+      <label for="book-category">Choose a book category:</label>
       <select id="book-category">
         <option value='all'>All Books</option>
         <option value='microsoft'>Microsoft</option>
