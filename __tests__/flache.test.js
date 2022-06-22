@@ -69,4 +69,30 @@ describe('Mock Store Tests', () => {
     expect(firstRequest).toEqual(secondRequest);
     expect(await cache.store.keys().then(keys => keys.length)).toEqual(1);
   })
+
+  test('Additional Options should be passable to flacheRequests', async () => {
+    fetchMock.mockResponse(JSON.stringify(mockResults));
+
+    const requestOptions = [{ method: 'POST' }, { method: 'POST', cors: 'same-origin' }, { method: 'GET', cache: 'no-cache' },
+    { credentials: 'include' }, { method: 'POST', body: JSON.stringify({ user: 'Jake', pw: 'hope this works' }) }]; 
+
+    for (const option of requestOptions) {
+      const response = await cache.flacheRequest('programmers', option);
+      expect(response).toEqual(mockResults);
+      // clear the cache incase any requests will cached; 
+      await cache.store.clear()
+    }
+  })
+
+  test('Should pass failed attempts to the user appropriately', async () => {
+    const failedResponses = [['An error occured', { status: 500 }], ['An error occured', { status: 503 }],
+      ['An error occured', { status: 410 }], ['An error occured', { status: 404 }]];
+    
+    fetchMock.mockResponses(failedResponses);
+
+    for (let i = 0; i < failedResponses.length; i++) {
+      // this is a proposed implementation - final output to be determined
+      expect(() => cache.flacheRequest('programmers')).toThrowError('request not ok');
+    }
+  })
 })
