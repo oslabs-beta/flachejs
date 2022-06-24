@@ -39,7 +39,9 @@
   "homepage": "https://github.com/oslabs-beta/flachejs#readme",
   "dependencies": {
     "localforage": "^1.10.0",
-    "md5": "^2.3.0"
+    "md5": "^2.3.0",
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.0",
