@@ -3,6 +3,7 @@ import generateKey from './helpers/generateKey';
 import validateCache from './helpers/validateCache';
 import validateCacheWS from './helpers/validateCacheWS';
 import getFetchRequest from './helpers/serverRequest';
+import websocketSetUp from './helpers/websocketSetUp';
 
 /**
  * The localforage module
@@ -66,12 +67,8 @@ class clientCache {
      */
      if (this.websockets === true) {
       console.log('store initiated, cache invalidation method is web sockets:',this.websockets);
-      const socket = io(`http://localhost:3000/api/socket`);
-      socket.on("newBook", (book) => {
-        console.log("Here is the new book on the client side: ", book);
-        console.log("Need to Invalidate Cache");
-        this.validateCacheWS();
-      })}
+      this.websocketSetUp();
+    }
     else console.log('store initiated ttl is:', this.ttl)
   }
 
@@ -116,5 +113,6 @@ clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
 clientCache.prototype.validateCacheWS = validateCacheWS;
+clientCache.prototype.websocketSetUp = websocketSetUp;
 
 export default clientCache
