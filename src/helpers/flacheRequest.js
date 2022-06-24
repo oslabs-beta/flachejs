@@ -51,8 +51,13 @@ const flacheRequest = async function (url, options) {
       return null;
     }
 
-    /** Apply TTL to object to be stored in cache */
-    apiResult.ttl = Date.now() + this.ttl
+    if (this.websockets === true) {
+      apiResult.url = url;
+    }
+    else {
+      /** Apply TTL to object to be stored in cache */
+      apiResult.ttl = Date.now() + this.ttl
+    }
 
     /** Add to cache */
     await this.store.setItem(uniqueKey, apiResult);

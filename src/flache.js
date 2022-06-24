@@ -1,6 +1,7 @@
 import flacheRequest from './helpers/flacheRequest';
 import generateKey from './helpers/generateKey';
 import validateCache from './helpers/validateCache';
+import validateCacheWS from './helpers/validateCacheWS';
 import getFetchRequest from './helpers/serverRequest';
 
 /**
@@ -14,6 +15,7 @@ import localforage from 'localforage';
 const defaultOptions = {
   maxCapacity: null, // this is in development
   ttl: 5000,
+  websockets: false, 
   config: {
     name: 'httpCache',
     storeName: 'request_response',
@@ -53,8 +55,24 @@ class clientCache {
 
     /** Apply TTL (time to live) and maxCapacity from user configuration or default */
     this.ttl = options.ttl || defaultOptions.ttl;
+    this.websockets = options.websockets || defaultOptions.websockets;
     this.maxCapacity = options.maxCapacity;
-    console.log('store initiated ttl is:', this.ttl)
+
+    /* If user set invalidation method to websockets instead of TTL: 
+     - set up web socket connection on client side every time someone initializes our store with WS
+     - listen for new events, every time you get a new event you need to call a function that invalidates the cache, 
+     - sends a new fetch request to the server 
+     - and update the cache so that the next time the request is made they have the new data instead of stale data 
+     */
+     if (this.websockets === true) {
+      console.log('store initiated, cache invalidation method is web sockets:',this.websockets);
+      const socket = io(`http://localhost:3000/api/socket`);
+      socket.on("newBook", (book) => {
+        console.log("Here is the new book on the client side: ", book);
+        console.log("Need to Invalidate Cache");
+        this.validateCacheWS();
+      })}
+    else console.log('store initiated ttl is:', this.ttl)
   }
 
   /**
@@ -97,5 +115,6 @@ clientCache.prototype.flacheRequest = flacheRequest;
 clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
+clientCache.prototype.validateCacheWS = validateCacheWS;
 
 export default clientCache
