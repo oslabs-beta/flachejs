@@ -35,7 +35,11 @@ const App = (props) => {
     if (query === 'all') url2 = "/bookshelf";
     else (url2 = '/bookshelf/' + query);
     let start = performance.now();
-    const books = await store.flacheRequest(url2);
+    const books = await store.flacheRequest(url2)
+      .then(res => {
+        console.log('Response from FlaceJS', res);
+        return res.json()
+      });
     let end = performance.now();
     setTime((end - start).toFixed(2));
     console.log("Duration: ", (end - start).toFixed(2), "ms");

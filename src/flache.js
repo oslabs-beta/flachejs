@@ -33,6 +33,7 @@ class clientCache {
    * create a clientCache
    * @param {object} options - further options for configuring the store
    */
+  
   constructor(options = defaultOptions) {
 
     /** Create store and override the default store options with user-given configurations */
