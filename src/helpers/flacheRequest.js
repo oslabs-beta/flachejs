@@ -27,6 +27,7 @@ const flacheRequest = async function (url, options) {
   let uniqueKey = this.generateKey(url, options)
 
   /** Check if the cache already contains the response to the given url or exists in cache but is invalid */
+
   const cacheResult = await this.store.getItem(uniqueKey)
     .then((entry) => {
       if (!entry) return null;
@@ -34,6 +35,8 @@ const flacheRequest = async function (url, options) {
       return this.validateCache(uniqueKey, entry);
     })
     .catch(err => err);
+  
+  console.log(cacheResult, 'this is our cache result')
 
   // what should we do if this throws an err? -> err would indicate that storage is full for write operations 
   // read operations this would probably indicate an issue with the store itself. 
@@ -63,6 +66,8 @@ const flacheRequest = async function (url, options) {
 //TO-DO how would this work with Blob or Array Buffer Data?
 
 const constructResponse = (entry) => {
+
+  console.log(entry, 'this is our entry')
   const init = {
     ...entry.response,
     headers: new Headers(entry.response.headers),
