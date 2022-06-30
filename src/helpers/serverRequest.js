@@ -122,5 +122,5 @@ class syntheticResponse extends Response {
   }
 }
 
-console.log(new syntheticResponse('12345'))
+// console.log(new syntheticResponse('12345'))
 export default getFetchRequest;
