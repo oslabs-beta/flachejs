@@ -9,7 +9,10 @@ import getFetchRequest from './helpers/serverRequest';
  * @see {@link https://www.npmjs.com/package/localforage}
  */
 import localforage from 'localforage';
+import FLACHESTORAGE from './flacheStorage';
+localforage.defineDriver(FLACHESTORAGE);
 
+// import testStorage from './flacheStorageTest';
 
 const defaultOptions = {
   maxCapacity: null, // this is in development
@@ -19,6 +22,7 @@ const defaultOptions = {
     storeName: 'request_response',
     description: 'A cache for client-side http requests',
     driver: [
+      FLACHESTORAGE._driver,
       localforage.INDEXEDDB,
       localforage.LOCALSTORAGE,
     ],
@@ -42,6 +46,9 @@ class clientCache {
       ...defaultOptions.config,
       ...options.config
     }))
+
+    // console.log("This store is: ",this.store); 
+    // console.log("Current driver: ",localforage.driver());
 
     /** Create details store */
     // TO-DO: same as above. 
@@ -98,5 +105,10 @@ clientCache.prototype.flacheRequest = flacheRequest;
 clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
+
+let cacheTest = localforage.createInstance({})
+cacheTest.setDriver('FLACHESTORAGE'); 
+
+console.log('local forage', cacheTest.driver);
 
 export default clientCache
