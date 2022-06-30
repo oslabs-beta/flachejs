@@ -19,11 +19,11 @@ mongoose.connection.once("open", () => {
   const bookChangeStream = connection.collection("books").watch();
 
   bookChangeStream.on("change", (change) => {
-    switch (change.operationType) {
+    switch (change.operationType) { // what about other DB changes? Delete...
       case "insert":
         const book = change.fullDocument;
         console.log("New book added: ", book);
-        io.of("/api/socket").emit("newBook", book);
+        io.of("/api/socket").emit("newItem", book);
         break;
       }})
 });

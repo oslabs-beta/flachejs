@@ -17,6 +17,7 @@ const defaultOptions = {
   maxCapacity: null, // this is in development
   ttl: 5000,
   websockets: false, 
+  websocketsURL: null,
   config: {
     name: 'httpCache',
     storeName: 'request_response',
@@ -57,6 +58,7 @@ class clientCache {
     /** Apply TTL (time to live) and maxCapacity from user configuration or default */
     this.ttl = options.ttl || defaultOptions.ttl;
     this.websockets = options.websockets || defaultOptions.websockets;
+    this.websocketsURL = options.websocketsURL || defaultOptions.websocketsURL;
     this.maxCapacity = options.maxCapacity;
 
     /* If user set invalidation method to websockets instead of TTL: 

@@ -2,9 +2,10 @@
 import io from "socket.io-client";
 
 async function websocketSetUp () {
-    const socket = io(`http://localhost:3000/api/socket`);
-    socket.on("newBook", (book) => {
-      console.log("Here is the new book on the client side: ", book);
+  console.log("URL: ",this.websocketsURL);
+    const socket = io(this.websocketsURL);
+    socket.on("newItem", (item) => {
+      console.log("Here is the new item: ", item);
       console.log("Need to Invalidate Cache");
       this.validateCacheWS();
     })
