@@ -2,7 +2,8 @@ import React, { Component, useState } from "react";
 import BookDisplay from "./BookDisplay.jsx";
 import flacheClient from '../../../src/flache';
 
-const store = new flacheClient({ websockets: true, websocketsURL: "http://localhost:3000/api/socket" });
+//const store = new flacheClient({ websockets: true, websocketsURL: "http://localhost:3000/api/socket" });
+const store = new flacheClient({ ttl: 5000 })
 
 const App = (props) => {
   const [books, setBooks] = useState(null);
