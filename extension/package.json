@@ -1,0 +1,33 @@
+{
+  "name": "flache",
+  "version": "0.0.1",
+  "description": "Example of using React for developing Google Chrome DevTools Extension",
+  "scripts": {
+    "serve": "webpack serve --mode development",
+    "build": "webpack --config webpack.config.js --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.0",
+    "@babel/preset-env": "^7.18.0",
+    "@babel/preset-react": "^7.17.12",
+    "babel-jest": "^28.1.1",
+    "babel-loader": "^8.2.5",
+    "concurrently": "^7.2.1",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "nodemon": "^2.0.16",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "request": "^2.88.2",
+    "style-loader": "^3.3.1",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.2"
+  },
+  "dependencies": {
+    "d3": "^7.5.0"
+  }
+}
