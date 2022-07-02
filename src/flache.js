@@ -55,6 +55,7 @@ class clientCache {
     /** Apply TTL (time to live) and maxCapacity from user configuration or default */
     this.ttl = options.ttl || defaultOptions.ttl;
     this.maxCapacity = options.maxCapacity;
+    this.duration;
     console.log('store initiated ttl is:', this.ttl)
   }
 

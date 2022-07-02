@@ -19,6 +19,8 @@ const defaultOptions = {
  */
 // TO-DO Add errror handling and potentially some routing. 
 const flacheRequest = async function (url, options) {
+  let start = performance.now()
+
   options = {
     ...defaultOptions,
     ...options
@@ -55,7 +57,8 @@ const flacheRequest = async function (url, options) {
     // this is where we would potetnially trigger evictions
     return constructResponse(apiResult);
   }
-
+  console.log("Hello?",start, performance.now());
+  this.duration = (performance.now() - start).toFixed(2);
   return constructResponse(cacheResult);
 };
 

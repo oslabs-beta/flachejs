@@ -43,6 +43,7 @@ const App = (props) => {
     let end = performance.now();
     setTime((end - start).toFixed(2));
     console.log("Duration: ", (end - start).toFixed(2), "ms");
+    console.log("Duration from Flache: ",store.duration);
     displayBooks(books);
   }
 
