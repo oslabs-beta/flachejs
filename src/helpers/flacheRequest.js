@@ -19,6 +19,7 @@ const defaultOptions = {
  */
 // TO-DO Add errror handling and potentially some routing. 
 const flacheRequest = async function (url, options) {
+  
   let start = performance.now()
 
   options = {

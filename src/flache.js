@@ -14,6 +14,7 @@ import localforage from 'localforage';
 const defaultOptions = {
   maxCapacity: null, // this is in development
   ttl: 5000,
+  duration: 0,
   config: {
     name: 'httpCache',
     storeName: 'request_response',
@@ -55,7 +56,7 @@ class clientCache {
     /** Apply TTL (time to live) and maxCapacity from user configuration or default */
     this.ttl = options.ttl || defaultOptions.ttl;
     this.maxCapacity = options.maxCapacity;
-    this.duration;
+    this.duration = defaultOptions.duration;
     console.log('store initiated ttl is:', this.ttl)
   }
 
