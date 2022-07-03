@@ -4,18 +4,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    devtools: './src/pages/DevTools/index.js',  // entry point for chrome dev tool
-    panel: './src/pages/Panel/index.js'  // entry point for react app
+    devtools: './src/pages/DevTools/',  // entry point for chrome dev tool
+    panel: './src/pages/Panel/'  // entry point for react app
   },
   resolve: {
     extensions: ['.js', '.jsx', '.css'],
   },
   output: {
-    path: path.join(__dirname, '/dist'),
+    path: path.join(__dirname, './src/pages/Panel/dist'),
     filename: '[name].bundle.js',
     clean: true,
   },
   devServer: {
+    historyApiFallback: true,
     port: 3333,
     static: {
       directory: path.join(__dirname, 'src', 'pages', 'panel'),
@@ -29,14 +30,11 @@ module.exports = {
         use: ['source-map-loader'],
       },
       {
-        test: /\.jsx?$/,
+        test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-              presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
+        },
       },
       {
         test: /\.css$/i,
@@ -45,6 +43,14 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         use: ['url-loader'],
+      },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader'
+          }
+        ]
       }
     ],
   },
@@ -53,7 +59,7 @@ module.exports = {
       patterns: [
         {
           from: 'src/manifest.json',
-          to: path.join(__dirname, './dist'),
+          to: path.join(__dirname, './src/pages/Panel/dist'),
           force: true,
           transform: function (content, path) {
             // generates the manifest file using the package.json informations
@@ -66,21 +72,16 @@ module.exports = {
             );
           },
         },
-        {
-          from: 'src/pages/Panel/assets',
-          to: path.join(__dirname, './dist/assets'),
-          force: true
-        }
       ],
     }),
     new HtmlWebpackPlugin({
-      template: './src/pages/DevTools/devtools.html',
+      template: './src/pages/DevTools/index.html',
       filename: 'devtools.html',
       chunks: ['devtools'],
       cache: false,
     }),
     new HtmlWebpackPlugin({
-      template: './src/pages/Panel/panel.html',
+      template: './src/pages/Panel/index.html',
       filename: 'panel.html',
       chunks: ['panel'],
       cache: false,

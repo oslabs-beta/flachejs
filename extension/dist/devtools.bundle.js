@@ -1,1 +1,0 @@
-chrome.devtools.panels.create("Flache",null,"panel.html");
