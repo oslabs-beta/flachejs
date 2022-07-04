@@ -2,6 +2,7 @@ import flacheRequest from './helpers/flacheRequest';
 import generateKey from './helpers/generateKey';
 import validateCache from './helpers/validateCache';
 import getFetchRequest from './helpers/serverRequest';
+import setDetailsCache from './helpers/setDetailsCache';
 
 /**
  * The localforage module
@@ -14,7 +15,7 @@ import localforage from 'localforage';
 const defaultOptions = {
   maxCapacity: null, // this is in development
   ttl: 5000,
-  duration: 0,
+  duration: null,
   config: {
     name: 'httpCache',
     storeName: 'request_response',
@@ -50,7 +51,8 @@ class clientCache {
       name: 'cacheDetails',
       storeName: 'requests',
       description: 'A list of past requests',
-      version: 1.0
+      driver: localforage.INDEXEDDB,
+      version: 1.0,
     })
 
     /** Apply TTL (time to live) and maxCapacity from user configuration or default */
@@ -86,6 +88,13 @@ class clientCache {
     })
   }
 
+  getItem(key) {
+    const store = this.store;
+    store.getItem(key)
+    .then(value => {return value})
+    .catch(err => {return err.message})
+  }
+
   listRequests(verbose = false) {
     if (verbose) {
       // print a pretty list of all requests with reverse hash.
@@ -100,5 +109,6 @@ clientCache.prototype.flacheRequest = flacheRequest;
 clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
+clientCache.prototype.setDetailsCache = setDetailsCache;
 
 export default clientCache

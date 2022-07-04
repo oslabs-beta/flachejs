@@ -35,7 +35,10 @@
     "copy-webpack-plugin": "^11.0.0",
     "d3": "^7.5.0",
     "html-loader": "^3.1.2",
+    "react-trend": "^1.2.5",
     "sass-loader": "^13.0.2",
-    "source-map-loader": "^4.0.0"
+    "socket.io-client": "^4.5.1",
+    "source-map-loader": "^4.0.0",
+    "zustand": "^4.0.0-rc.1"
   }
 }

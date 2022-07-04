@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import BookDisplay from "./BookDisplay.jsx";
 import flacheClient from '../../../src/flache';
 
@@ -8,7 +8,7 @@ const App = (props) => {
   const [books, setBooks] = useState(null);
   const [time, setTime] = useState(null);
   let bookList = [];
-
+  
   async function serverReq() {
     const query = document.querySelector('#book-category').value
     let url;
@@ -34,16 +34,16 @@ const App = (props) => {
     let url2;
     if (query === 'all') url2 = "/bookshelf";
     else (url2 = '/bookshelf/' + query);
-    let start = performance.now();
+    //let start = performance.now();
     const books = await store.flacheRequest(url2)
       .then(res => {
-        console.log('Response from FlaceJS', res);
+        //console.log('Response from FlaceJS', res);
         return res.json()
       });
-    let end = performance.now();
-    setTime((end - start).toFixed(2));
-    console.log("Duration: ", (end - start).toFixed(2), "ms");
-    console.log("Duration from Flache: ",store.duration);
+    //let end = performance.now();
+    setTime(store.duration);
+    //console.log("Duration: ", (end - start).toFixed(2), "ms");
+    //console.log("Duration from Flache: ",store.duration);
     displayBooks(books);
   }
 

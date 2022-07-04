@@ -56,10 +56,13 @@ const flacheRequest = async function (url, options) {
     /** Add to cache */
     await this.store.setItem(uniqueKey, apiResult);
     // this is where we would potetnially trigger evictions
+    this.duration = parseInt((performance.now() - start).toFixed(2));
+    this.setDetailsCache(this.duration);
     return constructResponse(apiResult);
   }
-  console.log("Hello?",start, performance.now());
-  this.duration = (performance.now() - start).toFixed(2);
+  
+  this.duration = parseInt((performance.now() - start).toFixed(2));
+  this.setDetailsCache(this.duration);
   return constructResponse(cacheResult);
 };
 
