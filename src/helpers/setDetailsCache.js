@@ -14,16 +14,11 @@ const setDetailsCache = async function (newDuration)  {
 
     // Send data to our Extension
     if(chrome && chrome.runtime && chrome.runtime.sendMessage) {
-      //console.log("Step 1: trying");
-      async function getDuration () {
-        console.log("Sending this duration: ", newValue);
-        chrome.runtime.sendMessage("bmkhjogdgeafjdanmhjddmcldejpgaga", newValue, function(response) {
-          console.log(response);
-        });
-      }
-      
-      getDuration();
-      //setInterval(getDuration, 6000 );
+      async function sendDuration () {
+        //console.log("Sending this duration: ", newValue);
+        chrome.runtime.sendMessage("bmkhjogdgeafjdanmhjddmcldejpgaga", {duration: newValue});
+      }  
+      sendDuration();
     }
 }
 
