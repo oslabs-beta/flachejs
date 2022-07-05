@@ -9,7 +9,7 @@ const Requests = () => {
             if (result != {}) {
             let allRequests = []
             for (let i = 0; i < result.request.url.length; i++) {
-                allRequests.push(<div>URL: {result.request.url[i]} -- Time (ms): {result.request.time[i]}</div>)
+                allRequests.push(<tr><td>{result.request.url[i]}</td><td>{result.request.time[i]}</td></tr>)
             }
             setReq(allRequests)
             }
@@ -19,7 +19,14 @@ const Requests = () => {
       return (
         <div>
             <h3>Requests:</h3>
-            {req}
+            <table>
+                <thead>
+                    <tr><td>URL</td><td>Time (ms)</td></tr>
+                </thead>
+                <tbody>
+                    {req}
+                </tbody>
+            </table>
         </div>
       );
     };

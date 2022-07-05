@@ -21,8 +21,8 @@ const Metrics = () => {
     return (
       <div>
         <h3>Metrics: </h3>
-        <h4>Last request duration: {lastDuration} ms</h4>
-        <h4>Average Cache Time: {avg} ms</h4>
+        <div>Last Request Duration: {lastDuration} ms</div>
+        <div>Average Cache Time: {avg} ms</div>
       <div id="speed-graph">
         <h4><u>Speed Graph:</u></h4>
           <Trend
