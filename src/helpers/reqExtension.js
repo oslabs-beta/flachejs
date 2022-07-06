@@ -1,10 +1,11 @@
-const reqExtension = (url, duration) => {
+const reqExtension = (url, duration, inCache) => {
     // Send data to our Extension
     if(chrome && chrome.runtime && chrome.runtime.sendMessage) {
         async function sendReq () {
           let aRequest = {
             requestURL: url,
-            time: duration
+            time: duration, 
+            inCache: inCache
           }
           chrome.runtime.sendMessage("bmkhjogdgeafjdanmhjddmcldejpgaga", aRequest);
         }  

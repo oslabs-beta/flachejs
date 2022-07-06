@@ -21,3 +21,12 @@ table, th, td {
 td {
   padding: 0 15px;
 }
+
+.TableFixed thead th { 
+  position: sticky; top: 0; z-index: 1;
+}
+
+.TableFixed {
+  overflow: auto; height: 150px;
+}
+
