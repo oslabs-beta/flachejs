@@ -13,7 +13,7 @@ npm install flachejs
 ### ES Modules (ESM)
 
 ```js
-import fetch from 'node-fetch';
+import flacheClient from flachejs;
 ```
 
 ## Usage
