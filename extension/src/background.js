@@ -8,16 +8,18 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, sendRespo
     if (request.requestURL) {
       chrome.storage.sync.get('request', function(result) {
         if (result.request.url === undefined) {
-          chrome.storage.sync.set({'request': {url: [request.requestURL], time: [request.time], inCache: [request.inCache]}});
+          chrome.storage.sync.set({'request': {url: [request.requestURL], time: [request.time], inCache: [request.inCache], ttl: [request.ttl]}});
         }
         else {
           let urls = result.request.url;
           let reqs = result.request.time;
           let inCache = result.request.inCache;
+          let ttls = result.request.ttl;
           urls.push(request.requestURL);
           reqs.push(request.time);
           inCache.push(request.inCache);
-          chrome.storage.sync.set({'request': {url: urls, time: reqs, inCache: inCache}});
+          ttls.push(request.ttl)
+          chrome.storage.sync.set({'request': {url: urls, time: reqs, inCache: inCache, ttl: ttls}});
         }
     });
    }

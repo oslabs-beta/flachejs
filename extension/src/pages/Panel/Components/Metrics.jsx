@@ -18,24 +18,26 @@ function Metrics () {
   }
   chrome.storage.onChanged.addListener(getStorage);
     return (
-      <div>
-        <h3>Metrics: </h3>
-        <div>Last Request Duration: {time} ms</div>
-        <div>Average Cache Time: {avg} ms</div>
+      <div class="Metrics">
+      <h3>Metrics: </h3>
       <div id="speed-graph">
         <h4><u>Speed Graph:</u></h4>
           <Trend
-            height = {Number(window.innerWidth / 5)}
+            height = {Number(window.innerWidth / 3)}
             //{Number(`${window.innerHeight}`)>=250 ? Number(`${window.innerHeight}`)-220 : 30}
             //width={Number(window.innerWidth / 3)}
             className="trend"
             data={durationArr}
-            gradient={['#B22222','#DC143C']}
+            gradient={['#B22222','#DC143C', '#FF7518','#FFAA33']}
             radius={0.9}
             strokeWidth={2.3}
             strokeLinecap={'round'}
           />
         </div>
+        <div class="info">
+        <div>Last Request Duration: {time} ms</div>
+        <div>Average Cache Time: {avg} ms</div>
+      </div>
       </div>
     );
   };
