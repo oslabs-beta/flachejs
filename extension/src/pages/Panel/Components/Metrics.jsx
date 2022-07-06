@@ -35,8 +35,8 @@ function Metrics () {
           />
         </div>
         <div class="info">
-        <div>Last Request Duration: {time} ms</div>
-        <div>Average Cache Time: {avg} ms</div>
+        <div>Last Request Duration: <b>{time} ms</b></div>
+        <div>Average Cache Time: <b>{avg} ms</b></div>
       </div>
       </div>
     );

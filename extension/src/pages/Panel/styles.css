@@ -34,7 +34,7 @@ td {
 }
 
 .TableFixed {
-  overflow: auto; height: 180px;
+  overflow: auto; height: 257px;
   font-size: 12px;
 }
 
@@ -44,4 +44,12 @@ td {
 
 .speed-graph {
   margin-bottom: 10px;
+}
+
+.noTTL {
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+.TTL {
+  background-color: rgb(221,255,221);
 }
