@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/oslabs-beta/flachejs.git"
   },
-  "keywords": [],
+  "keywords": ["flache", "flachejs", "cache", "indexeddb", "localforage", "localstorage", "client-side", "caching", "lru", "ttl", "fetch", "request"],
   "contributors": [
     {
       "name": "Jacob Policano",
