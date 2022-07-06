@@ -33,6 +33,9 @@ export function constructResponse(entry) {
    * Status Text
    * Headers
    * 
+   * Our 'synthetic reposne' overwirtes the getter functions for the url, redirect, and the type to mimic
+   * the native api as much as possible. Unclear if this could cause serious bugs or not yet. 
+   * 
    * We should consider what if any of the other properties may interfere with the normal workflow
    * a developer might expect, and also how this will impact any other native functions
    * that interface with the response obj. 
@@ -44,25 +47,7 @@ export function constructResponse(entry) {
    */
 
   const outputResponse = new SyntheticResponse(JSON.stringify(entry.data.data), init)
-  /**
-   * Note: this is to set the url. The url on the native Response Class is received via
-   * a getter. To overwirte this we have set an enunerable property url on our repsonse object, this 
-   * will modifiy the default behavior of the response somewhat and shluld be tested thoroughly. A 
-   * bug from this would probably be almost impossible to track down...
-   */
+ 
   return outputResponse;
 }
 
-const strData = 'Jake is testing'; 
-const init = {
-  status: 200,
-  statusText: 'This is a test',
-  headers: {
-    'content-type': 'application/json'
-  },
-  redirected: false,
-  type: 'Basic',
-  url: 'jake/test'
-}
-
-console.log('in testing file', constructResponse({ data: { data: strData }, response: init }).text())
