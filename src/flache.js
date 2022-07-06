@@ -2,7 +2,6 @@ import flacheRequest from './helpers/flacheRequest';
 import generateKey from './helpers/generateKey';
 import validateCache from './helpers/validateCache';
 import getFetchRequest from './helpers/serverRequest';
-import setDetailsCache from './helpers/setDetailsCache';
 import reqExtension from './helpers/reqExtension';
 
 /**
@@ -110,7 +109,6 @@ clientCache.prototype.flacheRequest = flacheRequest;
 clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
-clientCache.prototype.setDetailsCache = setDetailsCache;
 clientCache.prototype.reqExtension = reqExtension;
 
 export default clientCache

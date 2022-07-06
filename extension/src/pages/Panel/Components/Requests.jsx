@@ -5,7 +5,6 @@ const Requests = () => {
 
     function getStorage () {
         chrome.storage.sync.get('request', function(result) {
-            console.log('whats stored in request: ',result);
             if (result != {}) {
             let allRequests = []
             for (let i = 0; i < result.request.url.length; i++) {
@@ -15,7 +14,7 @@ const Requests = () => {
             }
         });
     }
-    setInterval(getStorage, 2000 );
+    chrome.storage.onChanged.addListener(getStorage);
       return (
         <div>
             <h3>Requests:</h3>

@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import Trend from 'react-trend';
 
-const Metrics = () => {
-  const [duration, setDuration] = useState(null);
-  const [lastDuration, setLast] = useState(null);
+function Metrics () {
+  const [durationArr, setDuration] = useState(null)
+  const [time, setTime] = useState(null);
   const [avg, setAvg] = useState(null);
 
   function getStorage () {
-      chrome.storage.sync.get('duration', function(result) {
-          if (result.duration != undefined) {
-            setDuration(result.duration)
-            setLast(result.duration[result.duration.length - 1])
-            let avg = result.duration.reduce((partialSum, a) => partialSum + a, 0)/result.duration.length
+      chrome.storage.sync.get('request', function(result) {
+          if (result != {}) {
+            setDuration(result.request.time)
+            setTime(result.request.time[result.request.time.length - 1])
+            let avg = result.request.time.reduce((partialSum, a) => partialSum + a, 0)/result.request.time.length
             if (!isNaN(avg)) setAvg(avg.toFixed(2))
           }
       });
   }
-
-  setInterval(getStorage, 2000 );
+  chrome.storage.onChanged.addListener(getStorage);
     return (
       <div>
         <h3>Metrics: </h3>
-        <div>Last Request Duration: {lastDuration} ms</div>
+        <div>Last Request Duration: {time} ms</div>
         <div>Average Cache Time: {avg} ms</div>
       <div id="speed-graph">
         <h4><u>Speed Graph:</u></h4>
@@ -30,7 +29,7 @@ const Metrics = () => {
             //{Number(`${window.innerHeight}`)>=250 ? Number(`${window.innerHeight}`)-220 : 30}
             //width={Number(window.innerWidth / 3)}
             className="trend"
-            data={duration}
+            data={durationArr}
             gradient={['#B22222','#DC143C']}
             radius={0.9}
             strokeWidth={2.3}
