@@ -7,8 +7,6 @@
 async function validateCache(uniqueKey, data) {
   // check if the item in the store's TTL has passed from the current time of the function call
   if (data.ttl < Date.now()) {
-    console.log('cache miss', data.ttl)
-    // TO-DO: remove invalid item from cache and remove all? 
     await this.store.removeItem(uniqueKey);
     return null;
   } else return data;

@@ -2,7 +2,14 @@ import React, { Component, useState } from "react";
 import BookDisplay from "./BookDisplay.jsx";
 import flacheClient from '../../../src/flache';
 
-const store = new flacheClient({ ttl: 60000 });
+const store = new flacheClient({
+  ttl: 60000,
+  config: {
+    driver: [
+      flacheClient.MEMORY,
+    ]
+  }
+});
 
 const App = (props) => {
   const [books, setBooks] = useState(null);
