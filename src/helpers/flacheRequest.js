@@ -1,7 +1,13 @@
-import generateKey from "./generateKey";
+import { constructResponse } from './synthResponse';
 
+/**
+ * Function to retreive data from Cache
+ * @param {string} url - the url to the server request
+ * @param {object} options - the request body
+ * @return {object} Object containing the retreived data from the cache
+ */
 
-const defaultOptions = {
+ const defaultOptions = {
   method: 'GET',
   mode: 'cors',
   cache: 'default',
@@ -14,27 +20,24 @@ const defaultOptions = {
   body: null,
 }
 
-/**
- * Function to retreive data from Cache
- * @param {string} url - the url to the server request
- * @param {object=} options - the request body
- * @return {object} Object containing the retreived data from the cache
- */
 // TO-DO Add errror handling and potentially some routing. 
 const flacheRequest = async function (url, options) {
+  
+  let start = performance.now()
+
   options = {
     ...defaultOptions,
     ...options
-  }
+  };
 
-  let uniqueKey = generateKey(url, options)
+  let uniqueKey = this.generateKey(url, options);
 
   /** Check if the cache already contains the response to the given url or exists in cache but is invalid */
   const cacheResult = await this.store.getItem(uniqueKey)
-    .then((data) => {
-      if (!data) return null;
+    .then((entry) => {
+      if (!entry) return null;
       // needs to return data if valid and null if not;
-      return this.validateCache(uniqueKey, data);
+      return this.validateCache(uniqueKey, entry);
     })
     .catch(err => err);
 
@@ -52,15 +55,19 @@ const flacheRequest = async function (url, options) {
     }
 
     /** Apply TTL to object to be stored in cache */
-    apiResult.ttl = Date.now() + this.ttl
-
+    apiResult.ttl = Date.now() + this.ttl;
     /** Add to cache */
     await this.store.setItem(uniqueKey, apiResult);
     // this is where we would potetnially trigger evictions
-    return apiResult.data;
+    this.duration = (performance.now() - start).toFixed(2);
+    this.reqExtension(url, this.duration, 'Miss', this.ttl);
+    return constructResponse(apiResult);
   }
-
-  return cacheResult.data;
+  
+  this.duration = (performance.now() - start).toFixed(2);
+  this.reqExtension(url, this.duration, 'Hit', -1);
+  return constructResponse(cacheResult);
 };
+
 
 export default flacheRequest;
