@@ -2,13 +2,15 @@
   "name": "flachejs",
   "version": "1.0.0",
   "description": "",
-  "main": "src/flache.js",
+  "main": "dist/flache.js",
+  "files": ["/src", "/dist"],
   "scripts": {
     "test": "jest",
     "dev": "webpack serve --open --config webpack.dev.js",
     "demo": "concurrently \"cross-env NODE_ENV=development webpack serve --open --config webpack.demo.js\" \"nodemon demo/server/server.js\"",
     "build": "webpack --config webpack.prod.js"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oslabs-beta/flachejs.git"
@@ -38,11 +40,10 @@
   },
   "homepage": "https://github.com/oslabs-beta/flachejs#readme",
   "dependencies": {
-    "http": "^0.0.1-security",
     "localforage": "^1.10.0",
-    "md5": "^2.3.0",
-    "socket.io": "^4.5.1"
+    "md5": "^2.3.0"
   },
+
   "devDependencies": {
     "@babel/core": "^7.18.0",
     "@babel/preset-env": "^7.18.0",
@@ -59,6 +60,7 @@
     "fake-indexeddb": "^3.1.8",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "http": "^0.0.1-security",
     "jest": "^28.1.1",
     "jest-environment-jsdom": "^28.1.1",
     "jest-fetch-mock": "^3.0.3",
@@ -68,6 +70,7 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "request": "^2.88.2",
+    "socket.io": "^4.5.1",
     "style-loader": "^3.3.1",
     "url-loader": "^4.1.1",
     "webpack": "^5.73.0",
