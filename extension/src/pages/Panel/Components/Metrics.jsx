@@ -20,6 +20,10 @@ function Metrics () {
     return (
       <div class="Metrics">
       <h3>Metrics: </h3>
+      <div class="info">
+        <div>Last Request Duration: <b>{time} ms</b></div>
+        <div>Average Cache Time: <b>{avg} ms</b></div>
+      </div>
       <div id="speed-graph">
         <h4><u>Speed Graph:</u></h4>
           <Trend
@@ -34,10 +38,6 @@ function Metrics () {
             strokeLinecap={'round'}
           />
         </div>
-        <div class="info">
-        <div>Last Request Duration: <b>{time} ms</b></div>
-        <div>Average Cache Time: <b>{avg} ms</b></div>
-      </div>
       </div>
     );
   };

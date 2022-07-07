@@ -34,7 +34,7 @@ td {
 }
 
 .TableFixed {
-  overflow: auto; height: 257px;
+  overflow: auto; height: 157px;
   font-size: 12px;
 }
 
@@ -47,9 +47,9 @@ td {
 }
 
 .noTTL {
-  background-color: rgba(255, 0, 0, 0.2);
+  background-color: rgb(221,255,221);
 }
 
 .TTL {
-  background-color: rgb(221,255,221);
+  background-color: rgba(255, 0, 0, 0.2);
 }

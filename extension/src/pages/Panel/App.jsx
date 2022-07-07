@@ -5,8 +5,8 @@ import Requests from './Components/Requests';
 const App = () => {
     return (
         <div>
-            <Metrics />
             <Requests />
+            <Metrics />
         </div>
     );
 }; 
