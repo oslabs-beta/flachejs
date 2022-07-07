@@ -13,7 +13,7 @@ npm install flachejs
 ### ES Modules (ESM)
 
 ```js
-import flacheClient from flachejs;
+import flacheClient from 'flachejs';
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ import flacheClient from flachejs;
 ### Plain text or HTML
 
 ```js
-import flacheClient from flachejs;
+import flacheClient from 'flachejs';
 
 const store = new flacheClient();
 const response = await store.flacheRequest('https://github.com/');
@@ -33,7 +33,7 @@ console.log(body);
 ### JSON
 
 ```js
-import flacheClient from flachejs;
+import flacheClient from 'flachejs';
 
 const store = new flacheClient();
 const response = await store.flacheRequest('https://api.github.com/users/github');
@@ -45,7 +45,7 @@ console.log(data);
 ### Simple Post
 
 ```js
-import flacheClient from flachejs;
+import flacheClient from 'flachejs';
 
 const store = new flacheClient();
 const response = await store.flacheRequest('https://httpbin.org/post', {method: 'POST', body: 'a=1'});
@@ -57,7 +57,7 @@ console.log(data);
 ### Post with JSON
 
 ```js
-import flacheClient from flachejs;
+import flacheClient from 'flachejs';
 
 const body = {a: 1};
 
@@ -76,7 +76,7 @@ console.log(data);
 Wrapping the fetch function into a `try/catch` block will catch _all_ exceptions, such as errors originating from node core libraries, like network errors, and operational errors which are instances of FetchError.
 
 ```js
-import flacheClient from flachejs;
+import flacheClient from 'flachejs';
 
 const store = new flacheClient();
 try {
