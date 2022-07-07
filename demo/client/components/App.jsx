@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import BookDisplay from "./BookDisplay.jsx";
 import flacheClient from '../../../src/flache';
 
-const store = new flacheClient({ ttl: 6000 });
+const store = new flacheClient({
+  ttl: 60000,
+  config: {
+    driver: [
+      flacheClient.MEMORY,
+    ]
+  }
+});
 
 const App = (props) => {
   const [books, setBooks] = useState(null);
@@ -34,16 +41,11 @@ const App = (props) => {
     let url2;
     if (query === 'all') url2 = "/bookshelf";
     else (url2 = '/bookshelf/' + query);
-    //let start = performance.now();
     const books = await store.flacheRequest(url2)
       .then(res => {
-        //console.log('Response from FlaceJS', res);
         return res.json()
       });
-    //let end = performance.now();
     setTime(store.duration);
-    //console.log("Duration: ", (end - start).toFixed(2), "ms");
-    //console.log("Duration from Flache: ",store.duration);
     displayBooks(books);
   }
 
@@ -80,7 +82,7 @@ const App = (props) => {
           <button type="button" className="getBtn" onClick={serverReq}>No Flache</button>
           <button type="button" className="getBtn" onClick={flacheReq}>Cache with Flache</button>
         </div>
-        {time && <p className="cacheDisplay">{`Request Duration: ${time} ms`}</p>}
+        {time !== null && <p className="cacheDisplay">{`Request Duration: ${time} ms`}</p>}
       </div>
       <div className="booksContainer">{books}</div>
     </main>

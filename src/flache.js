@@ -9,14 +9,17 @@ import reqExtension from './helpers/reqExtension';
  * @external "localforage"
  * @see {@link https://www.npmjs.com/package/localforage}
  */
+
 import localforage from 'localforage';
+
 import FLACHESTORAGE from './flacheStorage';
+
 localforage.defineDriver(FLACHESTORAGE);
 
 // import testStorage from './flacheStorageTest';
 
 const defaultOptions = {
-  maxCapacity: null, // this is in development
+  maxCapacity: null, // this is only relevant for local memory at the moment. 
   ttl: 5000,
   duration: null,
   config: {
@@ -28,7 +31,7 @@ const defaultOptions = {
       localforage.INDEXEDDB,
       localforage.LOCALSTORAGE,
     ],
-    version: 1.0,
+    version: 1.0, // this is only relevant if using IndexedDB
   }
 }
 
@@ -49,9 +52,6 @@ class clientCache {
       ...options.config
     }))
 
-    // console.log("This store is: ",this.store); 
-    // console.log("Current driver: ",localforage.driver());
-
     /** Create details store */
     // TO-DO: same as above. 
     this.details = localforage.createInstance({
@@ -66,49 +66,11 @@ class clientCache {
     this.ttl = options.ttl || defaultOptions.ttl;
     this.maxCapacity = options.maxCapacity;
     this.duration = defaultOptions.duration;
-    console.log('store initiated ttl is:', this.ttl)
   }
 
-  /**
-   * Get the size of the store
-   * @return {number} the store's size, by number of keys 
-   */
-  async getSize() {
-    const size = await this.store.keys()
-    return await size.length;
-  }
-
-  /**
-   * Set an item in the store
-   * @param {string} key - key of item in store
-   * @param {string} value - value of item in store
-   * @return {string} confirmation or error message to setting item in store
-   */
-  setItem(key, value) {
-    const store = this.store;
-    return store.setItem(key, value, (err, value) => {
-      if (err) {
-        return err.message
-      }
-
-      return `${value} added to store`
-    })
-  }
-
-  getItem(key) {
-    const store = this.store;
-    store.getItem(key)
-    .then(value => {return value})
-    .catch(err => {return err.message})
-  }
-
-  listRequests(verbose = false) {
-    if (verbose) {
-      // print a pretty list of all requests with reverse hash.
-    }
-    // return an array representaiton of requests. 
-    return;
-  }
+  static INDEXEDDB = localforage.INDEXEDDB;
+  static LOCALSTORAGE = localforage.LOCALSTORAGE;
+  static MEMORY = 'FLACHESTORAGE';
 }
 
 /** bind helper functions to class clientCache */
@@ -117,10 +79,5 @@ clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
 clientCache.prototype.reqExtension = reqExtension;
-
-let cacheTest = localforage.createInstance({})
-cacheTest.setDriver('FLACHESTORAGE'); 
-
-console.log('local forage', cacheTest.driver);
 
 export default clientCache

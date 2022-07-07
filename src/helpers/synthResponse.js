@@ -46,6 +46,8 @@ export function constructResponse(entry) {
    * Additionally - in testing I've noticed that the clone method does not work properly either. 
    */
 
+
+  // TO-DO Make sure to parse the data appropriately if it is text v. JSON 
   const outputResponse = new SyntheticResponse(JSON.stringify(entry.data.data), init)
  
   return outputResponse;

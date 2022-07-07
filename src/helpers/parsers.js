@@ -40,6 +40,7 @@ async function parseText(res) {
   }
 }
 
+// Note these are still in experimental phase
 async function parseBlob(res) {
   try {
     const data = { type: 'blob', data: await res.blob() }

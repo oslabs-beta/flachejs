@@ -11,9 +11,8 @@ class Node {
 const flacheStorage = {
   _driver: 'FLACHESTORAGE',
   _initStorage: function(capacity, options) {
-    // this.cache = {};
     this.capacity = capacity;
-    this.cache = new Map(); //TO-DO: override Map constructor to allow for capacity param
+    this.cache = new Map(); 
     this.head = null;
     this.tail = null;
 
@@ -39,7 +38,6 @@ const flacheStorage = {
   },
   
   getItem: function(key) {
-    this.printLL();
     return new Promise((resolve, reject) => {
       try {
         if (this.cache.has(key)) {
@@ -57,6 +55,7 @@ const flacheStorage = {
 
   iterate: function(iteratorCallback, successCallback) {
       // Custom implementation here...
+      // TO-DO 
   },  
 
   key: function (n, callback) {

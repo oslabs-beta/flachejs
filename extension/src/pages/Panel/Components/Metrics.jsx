@@ -31,7 +31,7 @@ function Metrics () {
             //{Number(`${window.innerHeight}`)>=250 ? Number(`${window.innerHeight}`)-220 : 30}
             //width={Number(window.innerWidth / 3)}
             className="trend"
-            data={durationArr}
+            data={durationArr && durationArr.map(element => parseInt(element))}
             gradient={['#B22222','#DC143C', '#FF7518','#FFAA33']}
             radius={0.9}
             strokeWidth={2.3}

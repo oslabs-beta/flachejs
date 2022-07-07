@@ -11,15 +11,16 @@ import parseResponse from './parsers';
  */
 
 async function getFetchRequest(url, options) {
-  console.log("Fetching from Server...");
   // TO-DO handling headers, response-types, etc for how to parse data; 
   let response = await fetch(url, options)
     .then(res => {
-      console.log('Response from server', res)
       const proxyResponse = parseResponse(res);
       return proxyResponse;
     })
-    .catch(err => console.log('Fetch error', err.message));
+    .catch(err => {
+      console.log('Fetch error', err.message);
+      return err;
+    });
   return response;
 }
 
