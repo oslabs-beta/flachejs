@@ -13,11 +13,11 @@ module.exports = {
   },
 
   output: {
-    filename: 'bundle.js',
+    filename: 'flache.min.js',
     path: path.resolve(__dirname, 'dist'),
-    sourceMapFilename: 'bundle.js.map',
+    // sourceMapFilename: 'flache.js.map',
     library: {
-      name: 'flacheClient',
+      name: 'flachejs',
       type: 'umd',
     }
   },
@@ -29,6 +29,7 @@ module.exports = {
       amd: 'localforage',
       root: 'localforage',
     },
+
     md5: {
       commonjs: 'md5',
       commonjs2: 'md5',

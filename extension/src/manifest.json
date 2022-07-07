@@ -2,7 +2,7 @@
   "name": "Flache",
   "version": "1.0",
   "manifest_version": 3,
-  "minimum_chrome_version": "10.0",
+  "minimum_chrome_version": "88",
   "devtools_page": "./pages/DevTools/index.html",
   "icons": { 
     "16": "./pages/Panel/images/16.png",
