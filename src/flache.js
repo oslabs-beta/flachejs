@@ -2,27 +2,36 @@ import flacheRequest from './helpers/flacheRequest';
 import generateKey from './helpers/generateKey';
 import validateCache from './helpers/validateCache';
 import getFetchRequest from './helpers/serverRequest';
+import reqExtension from './helpers/reqExtension';
 
 /**
  * The localforage module
  * @external "localforage"
  * @see {@link https://www.npmjs.com/package/localforage}
  */
+
 import localforage from 'localforage';
 
+import FLACHESTORAGE from './flacheStorage';
+
+localforage.defineDriver(FLACHESTORAGE);
+
+// import testStorage from './flacheStorageTest';
 
 const defaultOptions = {
-  maxCapacity: null, // this is in development
+  maxCapacity: null, // this is only relevant for local memory at the moment. 
   ttl: 5000,
+  duration: null,
   config: {
     name: 'httpCache',
     storeName: 'request_response',
     description: 'A cache for client-side http requests',
     driver: [
+      FLACHESTORAGE._driver,
       localforage.INDEXEDDB,
       localforage.LOCALSTORAGE,
     ],
-    version: 1.0,
+    version: 1.0, // this is only relevant if using IndexedDB
   }
 }
 
@@ -49,48 +58,19 @@ class clientCache {
       name: 'cacheDetails',
       storeName: 'requests',
       description: 'A list of past requests',
-      version: 1.0
+      driver: localforage.INDEXEDDB,
+      version: 1.0,
     })
 
     /** Apply TTL (time to live) and maxCapacity from user configuration or default */
     this.ttl = options.ttl || defaultOptions.ttl;
     this.maxCapacity = options.maxCapacity;
-    console.log('store initiated ttl is:', this.ttl)
+    this.duration = defaultOptions.duration;
   }
 
-  /**
-   * Get the size of the store
-   * @return {number} the store's size, by number of keys 
-   */
-  async getSize() {
-    const size = await this.store.keys()
-    return await size.length;
-  }
-
-  /**
-   * Set an item in the store
-   * @param {string} key - key of item in store
-   * @param {string} value - value of item in store
-   * @return {string} confirmation or error message to setting item in store
-   */
-  setItem(key, value) {
-    const store = this.store;
-    return store.setItem(key, value, (err, value) => {
-      if (err) {
-        return err.message
-      }
-
-      return `${value} added to store`
-    })
-  }
-
-  listRequests(verbose = false) {
-    if (verbose) {
-      // print a pretty list of all requests with reverse hash.
-    }
-    // return an array representaiton of requests. 
-    return;
-  }
+  static INDEXEDDB = localforage.INDEXEDDB;
+  static LOCALSTORAGE = localforage.LOCALSTORAGE;
+  static MEMORY = 'FLACHESTORAGE';
 }
 
 /** bind helper functions to class clientCache */
@@ -98,5 +78,6 @@ clientCache.prototype.flacheRequest = flacheRequest;
 clientCache.prototype.generateKey = generateKey;
 clientCache.prototype.validateCache = validateCache;
 clientCache.prototype.getFetchRequest = getFetchRequest;
+clientCache.prototype.reqExtension = reqExtension;
 
 export default clientCache

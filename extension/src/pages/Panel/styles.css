@@ -1,0 +1,55 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Fantasy";
+  justify-content: center;
+  text-align: center;
+}
+
+h3, h4 {
+  text-align: center;
+}
+
+body {
+  background-color:#f6f2ef;
+  display: flex;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 15px;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-family: monospace;
+  font-size: 15px;
+}
+
+td {
+  padding: 0 15px;
+}
+
+.TableFixed thead th { 
+  position: sticky; top: 0; z-index: 1;
+}
+
+.TableFixed {
+  overflow: auto; height: 157px;
+  font-size: 12px;
+}
+
+.info {
+  padding-top: 10px;
+}
+
+.speed-graph {
+  margin-bottom: 10px;
+}
+
+.noTTL {
+  background-color: rgb(221,255,221);
+}
+
+.TTL {
+  background-color: rgba(255, 0, 0, 0.2);
+}

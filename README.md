@@ -108,6 +108,7 @@ The default values are shown after each option key.
     storeName: 'request_response',
     description: 'A cache for client-side http requests',
     driver: [
+			clientCache.MEMORY,        //this is an LRU cache in the local memory
       localforage.INDEXEDDB,
       localforage.LOCALSTORAGE,
     ],
