@@ -38,7 +38,6 @@ const flacheStorage = {
   },
   
   getItem: function(key) {
-    this.printLL();
     return new Promise((resolve, reject) => {
       try {
         if (this.cache.has(key)) {

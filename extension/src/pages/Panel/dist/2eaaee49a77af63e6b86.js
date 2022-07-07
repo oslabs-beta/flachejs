@@ -1,0 +1,1 @@
+chrome.devtools.panels.create("Flache",null,"/pages/Panel/index.html"),chrome.runtime.onMessageExternal.addListener((function(e,o,n){console.log("This is the response from devtools: ",e)}));
